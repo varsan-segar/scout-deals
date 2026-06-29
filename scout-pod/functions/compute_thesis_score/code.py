@@ -7,6 +7,7 @@ from typing import Optional, List
 from lemma_sdk import FunctionContext, Pod
 
 import json
+import re
 
 class ThesisScoreInput(BaseModel):
     deal_id: str
@@ -64,6 +65,21 @@ def normalize_geography(val):
     return val if val else None
 
 
+def safe_json_loads(val, default):
+    """Try json.loads, fall back to replacing single-quoted keys/values."""
+    if not val:
+        return default
+    try:
+        return json.loads(val)
+    except json.JSONDecodeError:
+        pass
+    try:
+        fixed = re.sub(r"'([^']*)'", r'"\1"', val)
+        return json.loads(fixed)
+    except (json.JSONDecodeError, re.error):
+        return default
+
+
 def compute_thesis_score(ctx: FunctionContext, data: ThesisScoreInput) -> ThesisScoreResult:
     pod = Pod.from_env()
 
@@ -81,7 +97,7 @@ def compute_thesis_score(ctx: FunctionContext, data: ThesisScoreInput) -> Thesis
 
     # parse snapshot
     snapshot_json = brief.get("snapshot_json") or "{}"
-    snapshot = json.loads(snapshot_json)
+    snapshot = safe_json_loads(snapshot_json, {})
     stage = (snapshot.get("company_stage") or "unknown").lower()
     deal_geography = normalize_geography(snapshot.get("geography") or snapshot.get("country") or snapshot.get("headquarters") or deal.get("country") or deal.get("geography"))
     is_pre_revenue = snapshot.get("is_pre_revenue")
@@ -143,7 +159,7 @@ def compute_thesis_score(ctx: FunctionContext, data: ThesisScoreInput) -> Thesis
     founders_json_str = brief.get("founders_json", "[]")
     try:
         if founders_json_str:
-            founders = json.loads(founders_json_str)
+            founders = safe_json_loads(founders_json_str, [])
             if not founders:
                 founder_score = 0.0
             else:
