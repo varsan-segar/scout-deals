@@ -32,7 +32,6 @@ export function Dashboard() {
   const readyDeals = dealsList.filter(d => d.status === 'Ready').length
   const pendingDeals = dealsList.filter(d => d.status === 'Pending').length
   const analyzingDeals = dealsList.filter(d => d.status === 'Analyzing').length
-  const cancelledDeals = dealsList.filter(d => d.status === 'Cancelled').length
 
   // Pipeline Data
   const pipelineData = PIPELINE_STAGES.map(stage => ({
@@ -132,14 +131,6 @@ export function Dashboard() {
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold text-muted-foreground">{pendingDeals}</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Cancelled</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-muted-foreground">{cancelledDeals}</div>
               </CardContent>
             </Card>
           </div>

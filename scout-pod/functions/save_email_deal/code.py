@@ -9,6 +9,7 @@ import uuid
 
 class SaveEmailDealInput(BaseModel):
     company_name: str
+    sender_email: Optional[str] = None
     website_url: Optional[str] = None
     amount_raised: Optional[str] = None
     existing_investors: Optional[str] = None
@@ -33,7 +34,7 @@ def save_email_deal(ctx: FunctionContext, data: SaveEmailDealInput) -> SaveEmail
     # Defaults
     company_name = data.company_name or "Unknown Startup"
     
-    pod.table("deals").update(deal_id, {
+    update_fields = {
         "company_name": company_name,
         "website_url": data.website_url,
         "amount_raised": data.amount_raised,
@@ -45,6 +46,9 @@ def save_email_deal(ctx: FunctionContext, data: SaveEmailDealInput) -> SaveEmail
         "pipeline_stage": "Screening",
         "status": "Pending",
         "sector": "Other"
-    })
+    }
+    if data.sender_email:
+        update_fields["email_body"] = f"From: {data.sender_email}\n\n{data.email_body or ''}"
+    pod.table("deals").update(deal_id, update_fields)
     
     return SaveEmailDealResult(deal_id=deal_id)

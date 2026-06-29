@@ -108,6 +108,18 @@
   }
 }
 
+@layer components {
+  .score-high {
+    @apply text-green-600 dark:text-green-400;
+  }
+  .score-medium {
+    @apply text-yellow-600 dark:text-yellow-400;
+  }
+  .score-low {
+    @apply text-red-600 dark:text-red-400;
+  }
+}
+
 @layer utilities {
   .scrollbar-none {
     -ms-overflow-style: none;

@@ -16,7 +16,7 @@ const STAGE_OPTIONS = ["Pre-Seed", "Seed", "Series-A", "Series-B-Plus", "Growth"
 const GEOGRAPHY_OPTIONS = ["India", "US", "UK", "UAE", "SE Asia", "Europe", "Middle East", "Africa", "Latin America", "APAC"]
 
 export function ThesisPage() {
-  const { records: configList, isLoading } = useRecords({
+  const { records: configList, isLoading, error: configError } = useRecords({
     client: lemmaClient,
     podId: lemmaClient.podId,
     tableName: 'thesis_config',
@@ -119,6 +119,10 @@ export function ThesisPage() {
     setLocalConfig({ ...localConfig, [field]: newArr })
   }
 
+  if (configError) {
+    return <div className="p-10 max-w-4xl mx-auto"><div className="text-destructive">Error loading config: {String(configError)}</div></div>
+  }
+
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
   }
@@ -161,7 +165,7 @@ export function ThesisPage() {
                 className="min-h-[120px]"
               />
             ) : (
-              <p className="text-sm leading-relaxed">{displayConfig?.core_thesis ? parseTextArray(config.core_thesis).join(', ') : 'Not configured.'}</p>
+              <p className="text-sm leading-relaxed">{displayConfig?.core_thesis ? parseTextArray(displayConfig.core_thesis).join(', ') : 'Not configured.'}</p>
             )}
           </CardContent>
         </Card>
@@ -191,8 +195,8 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {displayConfig?.anti_thesis && parseTextArray(config.anti_thesis).length ? (
-                  parseTextArray(config.anti_thesis).map((val: string, i: number) => (
+                {displayConfig?.anti_thesis && parseTextArray(displayConfig.anti_thesis).length ? (
+                  parseTextArray(displayConfig.anti_thesis).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
                 ) : (
@@ -252,8 +256,8 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {displayConfig?.preferred_sectors && parseTextArray(config.preferred_sectors).length ? (
-                  parseTextArray(config.preferred_sectors).map((val: string, i: number) => (
+                {displayConfig?.preferred_sectors && parseTextArray(displayConfig.preferred_sectors).length ? (
+                  parseTextArray(displayConfig.preferred_sectors).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
                 ) : (
@@ -313,8 +317,8 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {displayConfig?.preferred_stages && parseTextArray(config.preferred_stages).length ? (
-                  parseTextArray(config.preferred_stages).map((val: string, i: number) => (
+                {displayConfig?.preferred_stages && parseTextArray(displayConfig.preferred_stages).length ? (
+                  parseTextArray(displayConfig.preferred_stages).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
                 ) : (
@@ -349,8 +353,8 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {displayConfig?.founder_prefs && parseTextArray(config.founder_prefs).length ? (
-                  parseTextArray(config.founder_prefs).map((val: string, i: number) => (
+                {displayConfig?.founder_prefs && parseTextArray(displayConfig.founder_prefs).length ? (
+                  parseTextArray(displayConfig.founder_prefs).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
                 ) : (
@@ -410,8 +414,8 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {displayConfig?.geography_focus && parseTextArray(config.geography_focus).length ? (
-                  parseTextArray(config.geography_focus).map((val: string, i: number) => (
+                {displayConfig?.geography_focus && parseTextArray(displayConfig.geography_focus).length ? (
+                  parseTextArray(displayConfig.geography_focus).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
                 ) : (

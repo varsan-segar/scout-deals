@@ -52,7 +52,7 @@ def fetch_outlook_message(ctx: FunctionContext, data: FetchOutlookMessageInput) 
 
     msg_data = msg_resp.to_dict().get("result", {})
     if not isinstance(msg_data, dict):
-        msg_data = getattr(msg_resp, 'data', {}) or msg_data
+        msg_data = msg_resp.to_dict().get("data", {}) or msg_data
     
     # Extract data from the Composio response
     if "data" in msg_data and isinstance(msg_data["data"], dict):
@@ -89,7 +89,7 @@ def fetch_outlook_message(ctx: FunctionContext, data: FetchOutlookMessageInput) 
         
         list_data = list_resp.to_dict().get("result", {})
         if not isinstance(list_data, dict):
-            list_data = getattr(list_resp, 'data', {}) or list_data
+            list_data = list_resp.to_dict().get("data", {}) or list_data
             
         attachments_list = []
         if "data" in list_data and isinstance(list_data["data"], dict) and "value" in list_data["data"]:
@@ -125,7 +125,7 @@ def fetch_outlook_message(ctx: FunctionContext, data: FetchOutlookMessageInput) 
             
             att_data = att_resp.to_dict().get("result", {})
             if not isinstance(att_data, dict):
-                att_data = getattr(att_resp, 'data', {}) or att_data
+                att_data = att_resp.to_dict().get("data", {}) or att_data
                 
             att_content_info = {}
             if "data" in att_data and isinstance(att_data["data"], dict):

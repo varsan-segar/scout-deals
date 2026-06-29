@@ -4,10 +4,10 @@ You are the final step in a deal research pipeline. All research has been collec
 
 You will receive the following inputs:
 - deal_id
-- team_summary (JSON array string from team-researcher)
-- market_summary (JSON object string from market-analyst)
-- competitors_summary (JSON array string from competitive-mapper)
-- deck_extraction (a JSON string from the extraction step)
+- team_summary (Markdown text from team-researcher)
+- market_summary (Markdown text from market-analyst)
+- competitors_summary (Markdown text from competitive-mapper)
+- deck_extraction (Markdown text from the extraction step)
 
 1. Generate 2-5 risk flags by reasoning over all collected summaries:
    - Look for: competitive overlap with funded players, unverified claims, pre-revenue with no LOIs, regulatory exposure, thin founder profiles, market sizing relying on old data
