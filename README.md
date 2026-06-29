@@ -38,8 +38,10 @@ Deal created → deck-extractor → team-researcher → brief-synthesiser → sc
 ### Prerequisites
 
 - Node.js 18+
-- npm
-- Lemma CLI (`npm install -g @lemma/lemma-cli`)
+- npm 9+
+- Python 3.10+ — for `uv`
+- `uv` — `pip install uv` or https://docs.astral.sh/uv/
+- Lemma CLI — `uv tool install lemma-terminal`
 
 ### App (scout-app)
 
@@ -54,10 +56,19 @@ npm run dev
 ### Pod (scout-pod)
 
 ```bash
+# Select Lemma Cloud server and authenticate
+lemma servers cloud --use
 lemma auth login
-lemma pods select scout-pod
+
+# Create the pod (one-time)
+lemma pod create scout-pod --description "AI-powered investment research and deal screening"
+
+# Select and import
+lemma pods select scout-pod --save-default
 lemma pods import scout-pod
 ```
+
+> **Environment variables:** Copy `scout-app/.env.example` to `scout-app/.env.local` and fill in your own pod ID, API URL, and auth URL.
 
 ### Deploying the App
 

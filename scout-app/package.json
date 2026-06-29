@@ -4,6 +4,10 @@
   "private": true,
   "type": "module",
   "description": "Scout Lemma app app.",
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "tsc -b && vite build",
