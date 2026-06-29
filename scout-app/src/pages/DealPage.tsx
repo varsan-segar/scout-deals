@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useLiveRecords, useUpdateRecord, useWorkflowStart } from 'lemma-sdk/react'
 import { lemmaClient } from '../lemma-client'
@@ -25,6 +25,7 @@ export function DealPage() {
   const location = useLocation()
   const [retryingRunId, setRetryingRunId] = useState<string | null>(null)
   const [terminalStatus, setTerminalStatus] = useState<'Error' | 'Cancelled' | 'Ready' | null>(null)
+  const [fileIndexStatus, setFileIndexStatus] = useState<string | null>(null)
   
   const { records: deals, isLoading, error } = useLiveRecords({
     client: lemmaClient,
@@ -55,6 +56,33 @@ export function DealPage() {
   const deal = deals?.[0]
   const d = deal as any
   const brief = briefs?.[0] as any
+
+  useEffect(() => {
+    if (!d?.deck_file_path) return
+    if (d.status === 'Analyzing' || retryingRunId) return
+
+    let cancelled = false
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
+
+    const check = async () => {
+      try {
+        const file = await lemmaClient.files.get(d.deck_file_path as string)
+        if (cancelled) return
+        setFileIndexStatus(file.status)
+        if (file.status !== 'COMPLETED' && file.status !== 'NOT_REQUIRED' && file.status !== 'ERROR' && file.status !== 'FAILED') {
+          timeoutId = setTimeout(check, 2000)
+        }
+      } catch {
+        if (cancelled) return
+        setFileIndexStatus(null)
+      }
+    }
+    check()
+    return () => { cancelled = true; if (timeoutId) clearTimeout(timeoutId) }
+  }, [d?.deck_file_path, d?.status, retryingRunId])
+
+  const isIndexing = fileIndexStatus === 'PENDING' || fileIndexStatus === 'PROCESSING'
+  const isFileError = fileIndexStatus === 'ERROR' || fileIndexStatus === 'FAILED'
 
   const workflowRunId = retryingRunId ?? (location.state as { workflowRunId?: string | null })?.workflowRunId ?? d?.workflow_run_id ?? null
 
@@ -111,9 +139,19 @@ export function DealPage() {
               <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
                 The analysis for {d.company_name || 'this deal'} was cancelled and did not complete.
               </p>
-              <Button onClick={handleRetry}>
-                <RotateCcw size={16} className="mr-2" /> Run Analysis Again
-              </Button>
+              {isIndexing ? (
+                <Button disabled>
+                  <RotateCcw size={16} className="mr-2 animate-spin" /> Indexing...
+                </Button>
+              ) : isFileError ? (
+                <Button disabled>
+                  <RotateCcw size={16} className="mr-2" /> File Error
+                </Button>
+              ) : (
+                <Button onClick={handleRetry}>
+                  <RotateCcw size={16} className="mr-2" /> Run Analysis Again
+                </Button>
+              )}
             </div>
           </main>
 
@@ -140,9 +178,19 @@ export function DealPage() {
               <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
                 The analysis for {d.company_name || 'this deal'} encountered an error and could not complete.
               </p>
-              <Button onClick={handleRetry}>
-                <RotateCcw size={16} className="mr-2" /> Retry Analysis
-              </Button>
+              {isIndexing ? (
+                <Button disabled>
+                  <RotateCcw size={16} className="mr-2 animate-spin" /> Indexing...
+                </Button>
+              ) : isFileError ? (
+                <Button disabled>
+                  <RotateCcw size={16} className="mr-2" /> File Error
+                </Button>
+              ) : (
+                <Button onClick={handleRetry}>
+                  <RotateCcw size={16} className="mr-2" /> Retry Analysis
+                </Button>
+              )}
             </div>
           </main>
 
@@ -173,10 +221,30 @@ export function DealPage() {
 
           {isPending ? (
             <div className="py-20 text-center border-2 border-dashed rounded-xl border-border/60">
-              <p className="text-muted-foreground mb-4">Analysis has not been run for this deal.</p>
-              <Button onClick={handleRetry}>
-                Run Analysis Now
-              </Button>
+              {isIndexing ? (
+                <>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                  <p className="text-muted-foreground mb-4">Indexing document... This should only take a moment.</p>
+                  <Button disabled>
+                    <RotateCcw size={16} className="mr-2 animate-spin" /> Indexing...
+                  </Button>
+                </>
+              ) : isFileError ? (
+                <>
+                  <AlertTriangle className="text-destructive mx-auto mb-4" size={40} />
+                  <p className="text-muted-foreground mb-4">File indexing failed. Please re-upload the deck.</p>
+                  <Button disabled>
+                    <RotateCcw size={16} className="mr-2" /> File Error
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <p className="text-muted-foreground mb-4">Analysis has not been run for this deal.</p>
+                  <Button onClick={handleRetry}>
+                    Run Analysis Now
+                  </Button>
+                </>
+              )}
             </div>
           ) : (
             <div className="space-y-4">
