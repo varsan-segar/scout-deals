@@ -31,8 +31,7 @@
       "config": {
         "agent_name": "email-extractor",
         "input_mapping": {
-          "email_body": {"type": "expression", "value": "\"fetch-message\".email_body"},
-          "file_path": {"type": "expression", "value": "\"fetch-message\".attachment_path"}
+          "email_body": {"type": "expression", "value": "\"fetch-message\".email_body"}
         }
       }
     },
