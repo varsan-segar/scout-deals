@@ -90,8 +90,9 @@ export function ThesisPage() {
   }
 
   const handleSave = async () => {
+    const { id: _id, ...rest } = localConfig || {}
     const toSave = {
-      ...localConfig,
+      ...rest,
       core_thesis: (localConfig.core_thesis || '').trim(),
       preferred_stages: stringifyArray(parseTextArray(localConfig.preferred_stages)),
       preferred_sectors: stringifyArray(parseTextArray(localConfig.preferred_sectors)),
