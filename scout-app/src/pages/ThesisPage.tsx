@@ -12,7 +12,7 @@ import { Badge } from '../components/ui/badge'
 import { Settings, Plus, Trash2, Save, X } from 'lucide-react'
 
 const SECTOR_OPTIONS = ["FinTech", "HealthTech", "EdTech", "SaaS B2B", "Consumer", "D2C", "PropTech", "DeepTech", "Other"]
-const STAGE_OPTIONS = ["Screening", "Interested", "Meeting", "Term Sheet", "Passed"]
+const STAGE_OPTIONS = ["Pre-Seed", "Seed", "Series-A", "Series-B-Plus", "Growth", "Late Stage", "Undisclosed"]
 const GEOGRAPHY_OPTIONS = ["India", "US", "UK", "UAE", "SE Asia", "Europe", "Middle East", "Africa", "Latin America", "APAC"]
 
 export function ThesisPage() {
@@ -43,6 +43,8 @@ export function ThesisPage() {
   const config = configList?.[0] as any
   const [editing, setEditing] = useState(false)
   const [localConfig, setLocalConfig] = useState<any>(null)
+  const [savedData, setSavedData] = useState<any>(null)
+  const displayConfig = savedData || config
 
   const parseTextArray = (value: unknown): string[] => {
     if (!value) return ['']
@@ -65,7 +67,8 @@ export function ThesisPage() {
   }
 
   const handleEdit = () => {
-    setLocalConfig(config || {
+    setLocalConfig(displayConfig || {
+      core_thesis: '',
       preferred_stages: '',
       preferred_sectors: '',
       founder_prefs: '',
@@ -79,6 +82,7 @@ export function ThesisPage() {
   const handleSave = async () => {
     const toSave = {
       ...localConfig,
+      core_thesis: stringifyArray(parseTextArray(localConfig.core_thesis)),
       preferred_stages: stringifyArray(parseTextArray(localConfig.preferred_stages)),
       preferred_sectors: stringifyArray(parseTextArray(localConfig.preferred_sectors)),
       founder_prefs: stringifyArray(parseTextArray(localConfig.founder_prefs)),
@@ -90,6 +94,7 @@ export function ThesisPage() {
     } else {
       await createConfig(toSave)
     }
+    setSavedData(toSave)
     setEditing(false)
   }
 
@@ -150,13 +155,13 @@ export function ThesisPage() {
           <CardContent>
             {editing ? (
               <Textarea 
-                value={localConfig.anti_thesis || ''}
-                onChange={e => updateField('anti_thesis', e.target.value)}
-                placeholder="We avoid companies that..."
+                value={localConfig.core_thesis || ''}
+                onChange={e => updateField('core_thesis', e.target.value)}
+                placeholder="We invest in companies that..."
                 className="min-h-[120px]"
               />
             ) : (
-              <p className="text-sm leading-relaxed">{config?.anti_thesis ? parseTextArray(config.anti_thesis).join(', ') : 'Not configured.'}</p>
+              <p className="text-sm leading-relaxed">{displayConfig?.core_thesis ? parseTextArray(config.core_thesis).join(', ') : 'Not configured.'}</p>
             )}
           </CardContent>
         </Card>
@@ -186,7 +191,7 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {config?.anti_thesis && parseTextArray(config.anti_thesis).length ? (
+                {displayConfig?.anti_thesis && parseTextArray(config.anti_thesis).length ? (
                   parseTextArray(config.anti_thesis).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
@@ -247,7 +252,7 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {config?.preferred_sectors && parseTextArray(config.preferred_sectors).length ? (
+                {displayConfig?.preferred_sectors && parseTextArray(config.preferred_sectors).length ? (
                   parseTextArray(config.preferred_sectors).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
@@ -308,7 +313,7 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {config?.preferred_stages && parseTextArray(config.preferred_stages).length ? (
+                {displayConfig?.preferred_stages && parseTextArray(config.preferred_stages).length ? (
                   parseTextArray(config.preferred_stages).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
@@ -344,7 +349,7 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {config?.founder_prefs && parseTextArray(config.founder_prefs).length ? (
+                {displayConfig?.founder_prefs && parseTextArray(config.founder_prefs).length ? (
                   parseTextArray(config.founder_prefs).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
@@ -405,7 +410,7 @@ export function ThesisPage() {
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                {config?.geography_focus && parseTextArray(config.geography_focus).length ? (
+                {displayConfig?.geography_focus && parseTextArray(config.geography_focus).length ? (
                   parseTextArray(config.geography_focus).map((val: string, i: number) => (
                     <li key={i}>{val}</li>
                   ))
@@ -434,7 +439,7 @@ export function ThesisPage() {
                 </Label>
               </div>
             ) : (
-              <p className="text-sm">{config?.pre_revenue_ok ? 'Yes' : 'No'}</p>
+              <p className="text-sm">{displayConfig?.pre_revenue_ok ? 'Yes' : 'No'}</p>
             )}
           </CardContent>
         </Card>

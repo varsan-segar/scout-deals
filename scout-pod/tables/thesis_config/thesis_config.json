@@ -3,6 +3,7 @@
   "primary_key_column": "id",
   "enable_rls": false,
   "columns": [
+    { "name": "core_thesis", "type": "TEXT" },
     { "name": "preferred_stages", "type": "TEXT" },
     { "name": "preferred_sectors", "type": "TEXT" },
     { "name": "founder_prefs", "type": "TEXT" },
