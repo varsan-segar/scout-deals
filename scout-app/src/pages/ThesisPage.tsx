@@ -7,7 +7,13 @@ import { Textarea } from '../components/ui/textarea'
 import { Input } from '../components/ui/input'
 import { Label } from '../components/ui/label'
 import { Checkbox } from '../components/ui/checkbox'
-import { Settings, Plus, Trash2, Save } from 'lucide-react'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select'
+import { Badge } from '../components/ui/badge'
+import { Settings, Plus, Trash2, Save, X } from 'lucide-react'
+
+const SECTOR_OPTIONS = ["FinTech", "HealthTech", "EdTech", "SaaS B2B", "Consumer", "D2C", "PropTech", "DeepTech", "Other"]
+const STAGE_OPTIONS = ["Screening", "Interested", "Meeting", "Term Sheet", "Passed"]
+const GEOGRAPHY_OPTIONS = ["India", "US", "UK", "UAE", "SE Asia", "Europe", "Middle East", "Africa", "Latin America", "APAC"]
 
 export function ThesisPage() {
   const { records: configList, isLoading } = useRecords({
@@ -199,20 +205,45 @@ export function ThesisPage() {
           <CardContent>
             {editing ? (
               <div className="space-y-3">
-                {parseTextArray(localConfig.preferred_sectors).map((val: string, i: number) => (
-                  <div key={i} className="flex gap-2">
-                    <Input 
-                      value={val} 
-                      onChange={e => updateArrayField('preferred_sectors', i, e.target.value)} 
-                    />
-                    <Button variant="ghost" size="icon" onClick={() => removeArrayItem('preferred_sectors', i)} className="shrink-0 text-muted-foreground hover:text-destructive">
-                      <Trash2 size={16} />
-                    </Button>
-                  </div>
-                ))}
-                <Button variant="outline" size="sm" onClick={() => addArrayItem('preferred_sectors')} className="mt-2">
-                  <Plus size={14} className="mr-1" /> Add Item
-                </Button>
+                <div className="flex gap-2">
+                  <Select onValueChange={val => {
+                    const current = parseTextArray(localConfig.preferred_sectors).filter(Boolean)
+                    setLocalConfig({ ...localConfig, preferred_sectors: [...current, val] })
+                  }}>
+                    <SelectTrigger className="flex-1">
+                      <SelectValue placeholder="Select a sector..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {SECTOR_OPTIONS.filter(o => !parseTextArray(localConfig.preferred_sectors).includes(o)).map(opt => (
+                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    placeholder="Or type custom..."
+                    className="w-48 shrink-0"
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        const val = (e.target as HTMLInputElement).value.trim()
+                        if (val) {
+                          const current = parseTextArray(localConfig.preferred_sectors).filter(Boolean)
+                          setLocalConfig({ ...localConfig, preferred_sectors: [...current, val] })
+                          ;(e.target as HTMLInputElement).value = ''
+                        }
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {parseTextArray(localConfig.preferred_sectors).filter(Boolean).map((val: string, i: number) => (
+                    <Badge key={i} variant="secondary" className="gap-1 pr-1">
+                      {val}
+                      <button onClick={() => removeArrayItem('preferred_sectors', i)} className="hover:text-destructive ml-1">
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
@@ -235,20 +266,45 @@ export function ThesisPage() {
           <CardContent>
             {editing ? (
               <div className="space-y-3">
-                {parseTextArray(localConfig.preferred_stages).map((val: string, i: number) => (
-                  <div key={i} className="flex gap-2">
-                    <Input 
-                      value={val} 
-                      onChange={e => updateArrayField('preferred_stages', i, e.target.value)} 
-                    />
-                    <Button variant="ghost" size="icon" onClick={() => removeArrayItem('preferred_stages', i)} className="shrink-0 text-muted-foreground hover:text-destructive">
-                      <Trash2 size={16} />
-                    </Button>
-                  </div>
-                ))}
-                <Button variant="outline" size="sm" onClick={() => addArrayItem('preferred_stages')} className="mt-2">
-                  <Plus size={14} className="mr-1" /> Add Item
-                </Button>
+                <div className="flex gap-2">
+                  <Select onValueChange={val => {
+                    const current = parseTextArray(localConfig.preferred_stages).filter(Boolean)
+                    setLocalConfig({ ...localConfig, preferred_stages: [...current, val] })
+                  }}>
+                    <SelectTrigger className="flex-1">
+                      <SelectValue placeholder="Select a stage..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {STAGE_OPTIONS.filter(o => !parseTextArray(localConfig.preferred_stages).includes(o)).map(opt => (
+                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    placeholder="Or type custom..."
+                    className="w-48 shrink-0"
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        const val = (e.target as HTMLInputElement).value.trim()
+                        if (val) {
+                          const current = parseTextArray(localConfig.preferred_stages).filter(Boolean)
+                          setLocalConfig({ ...localConfig, preferred_stages: [...current, val] })
+                          ;(e.target as HTMLInputElement).value = ''
+                        }
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {parseTextArray(localConfig.preferred_stages).filter(Boolean).map((val: string, i: number) => (
+                    <Badge key={i} variant="secondary" className="gap-1 pr-1">
+                      {val}
+                      <button onClick={() => removeArrayItem('preferred_stages', i)} className="hover:text-destructive ml-1">
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
@@ -307,20 +363,45 @@ export function ThesisPage() {
           <CardContent>
             {editing ? (
               <div className="space-y-3">
-                {parseTextArray(localConfig.geography_focus).map((val: string, i: number) => (
-                  <div key={i} className="flex gap-2">
-                    <Input 
-                      value={val} 
-                      onChange={e => updateArrayField('geography_focus', i, e.target.value)} 
-                    />
-                    <Button variant="ghost" size="icon" onClick={() => removeArrayItem('geography_focus', i)} className="shrink-0 text-muted-foreground hover:text-destructive">
-                      <Trash2 size={16} />
-                    </Button>
-                  </div>
-                ))}
-                <Button variant="outline" size="sm" onClick={() => addArrayItem('geography_focus')} className="mt-2">
-                  <Plus size={14} className="mr-1" /> Add Item
-                </Button>
+                <div className="flex gap-2">
+                  <Select onValueChange={val => {
+                    const current = parseTextArray(localConfig.geography_focus).filter(Boolean)
+                    setLocalConfig({ ...localConfig, geography_focus: [...current, val] })
+                  }}>
+                    <SelectTrigger className="flex-1">
+                      <SelectValue placeholder="Select a geography..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {GEOGRAPHY_OPTIONS.filter(o => !parseTextArray(localConfig.geography_focus).includes(o)).map(opt => (
+                        <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    placeholder="Or type custom..."
+                    className="w-48 shrink-0"
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        const val = (e.target as HTMLInputElement).value.trim()
+                        if (val) {
+                          const current = parseTextArray(localConfig.geography_focus).filter(Boolean)
+                          setLocalConfig({ ...localConfig, geography_focus: [...current, val] })
+                          ;(e.target as HTMLInputElement).value = ''
+                        }
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {parseTextArray(localConfig.geography_focus).filter(Boolean).map((val: string, i: number) => (
+                    <Badge key={i} variant="secondary" className="gap-1 pr-1">
+                      {val}
+                      <button onClick={() => removeArrayItem('geography_focus', i)} className="hover:text-destructive ml-1">
+                        <X size={14} />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
               </div>
             ) : (
               <ul className="list-disc pl-5 space-y-2 text-sm">
