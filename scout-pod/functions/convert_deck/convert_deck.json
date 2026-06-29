@@ -1,0 +1,12 @@
+{
+  "name": "convert_deck",
+  "description": "Converts PPT/PPTX files to PDF using python-pptx and fpdf2. If already a PDF, acts as a passthrough.",
+  "type": "API",
+  "code": {"$file": "code.py"},
+  "permissions": {
+    "grants": [
+      {"resource_type": "datastore_table", "resource_name": "deals", "permission_ids": ["datastore.table.read", "datastore.record.read", "datastore.record.write"]},
+      {"resource_type": "folder", "resource_name": "/decks", "permission_ids": ["folder.read", "folder.write", "folder.delete"]}
+    ]
+  }
+}

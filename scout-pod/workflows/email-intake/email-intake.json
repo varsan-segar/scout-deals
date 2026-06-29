@@ -1,0 +1,81 @@
+{
+  "name": "email-intake",
+  "description": "Triggered by Outlook connector. Extracts deal info from email, converts deck to PDF, and saves a pending deal.",
+  "start": {
+    "type": "EVENT",
+    "config": {
+      "connector_id": "outlook",
+      "connector_trigger_id": "outlook:composio:outlook_message_trigger"
+    },
+    "schema": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "nodes": [
+    {
+      "id": "fetch-message",
+      "type": "FUNCTION",
+      "label": "Fetch Outlook Message",
+      "config": {
+        "function_name": "fetch_outlook_message",
+        "input_mapping": {
+          "message_id": {"type": "expression", "value": "start.payload.id"}
+        }
+      }
+    },
+    {
+      "id": "email-extractor",
+      "type": "AGENT",
+      "label": "Extract from Email",
+      "config": {
+        "agent_name": "email-extractor",
+        "input_mapping": {
+          "email_body": {"type": "expression", "value": "\"fetch-message\".email_body"},
+          "file_path": {"type": "expression", "value": "\"fetch-message\".attachment_path"}
+        }
+      }
+    },
+    {
+      "id": "convert-deck",
+      "type": "FUNCTION",
+      "label": "Convert PPT to PDF",
+      "config": {
+        "function_name": "convert_deck",
+        "input_mapping": {
+          "file_path": {"type": "expression", "value": "\"fetch-message\".attachment_path"}
+        }
+      }
+    },
+    {
+      "id": "save-deal",
+      "type": "FUNCTION",
+      "label": "Save Email Deal",
+      "config": {
+        "function_name": "save_email_deal",
+        "input_mapping": {
+          "company_name": {"type": "expression", "value": "\"email-extractor\".company_name || 'Unknown'"},
+          "website_url": {"type": "expression", "value": "\"email-extractor\".website_url || ''"},
+          "amount_raised": {"type": "expression", "value": "\"email-extractor\".amount_raised || ''"},
+          "existing_investors": {"type": "expression", "value": "\"email-extractor\".existing_investors || ''"},
+          "year_founded": {"type": "expression", "value": "\"email-extractor\".year_founded || `0`"},
+          "revenue_model": {"type": "expression", "value": "\"email-extractor\".revenue_model || ''"},
+          "email_body": {"type": "expression", "value": "\"fetch-message\".email_body || ''"},
+          "sender_email": {"type": "expression", "value": "\"fetch-message\".sender_address || ''"},
+          "message_id": {"type": "expression", "value": "start.payload.id"},
+          "deck_file_path": {"type": "expression", "value": "\"convert-deck\".new_file_path || ''"}
+        }
+      }
+    },
+    {
+      "id": "end",
+      "type": "END"
+    }
+  ],
+  "edges": [
+    {"id": "e1", "source": "fetch-message", "target": "email-extractor"},
+    {"id": "e2", "source": "email-extractor", "target": "convert-deck"},
+    {"id": "e3", "source": "convert-deck", "target": "save-deal"},
+    {"id": "e4", "source": "save-deal", "target": "end"}
+  ]
+}

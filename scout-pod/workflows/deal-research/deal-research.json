@@ -1,0 +1,126 @@
+{
+  "name": "deal-research",
+  "description": "Orchestrates the 5-agent deal research pipeline. Extracts deck info, then in parallel researches team/market/competitors, then synthesises the final brief.",
+  "start": {
+    "type": "MANUAL"
+  },
+  "nodes": [
+    {
+      "id": "intake",
+      "type": "FORM",
+      "label": "Input form",
+      "config": {
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "deal_id": {"type": "string"},
+            "file_path": {"type": "string"},
+            "company_name": {"type": "string"},
+            "sector": {"type": "string"}
+          },
+          "required": ["deal_id", "file_path", "company_name", "sector"]
+        }
+      }
+    },
+    {
+      "id": "convert-deck",
+      "type": "FUNCTION",
+      "label": "Convert PPT to PDF",
+      "config": {
+        "function_name": "convert_deck",
+        "input_mapping": {
+          "file_path": {"type": "expression", "value": "intake.file_path"}
+        }
+      }
+    },
+    {
+      "id": "extract-deck",
+      "type": "AGENT",
+      "label": "deck-extractor",
+      "config": {
+        "agent_name": "deck-extractor",
+        "input_mapping": {
+          "deal_id": {"type": "expression", "value": "intake.deal_id"},
+          "file_path": {"type": "expression", "value": "\"convert-deck\".new_file_path"}
+        }
+      }
+    },
+    {
+      "id": "research-team",
+      "type": "AGENT",
+      "label": "team-researcher",
+      "config": {
+        "agent_name": "team-researcher",
+        "input_mapping": {
+          "company_name": {"type": "expression", "value": "intake.company_name"},
+          "deck_extraction": {"type": "expression", "value": "\"extract-deck\".answer"}
+        }
+      }
+    },
+    {
+      "id": "size-market",
+      "type": "AGENT",
+      "label": "market-analyst",
+      "config": {
+        "agent_name": "market-analyst",
+        "input_mapping": {
+          "company_name": {"type": "expression", "value": "intake.company_name"},
+          "sector": {"type": "expression", "value": "intake.sector"},
+          "deck_extraction": {"type": "expression", "value": "\"extract-deck\".answer"}
+        }
+      }
+    },
+    {
+      "id": "map-competitors",
+      "type": "AGENT",
+      "label": "competitive-mapper",
+      "config": {
+        "agent_name": "competitive-mapper",
+        "input_mapping": {
+          "company_name": {"type": "expression", "value": "intake.company_name"},
+          "deck_extraction": {"type": "expression", "value": "\"extract-deck\".answer"}
+        }
+      }
+    },
+    {
+      "id": "synthesise-brief",
+      "type": "AGENT",
+      "label": "brief-synthesiser",
+      "config": {
+        "agent_name": "brief-synthesiser",
+        "input_mapping": {
+          "deal_id": {"type": "expression", "value": "intake.deal_id"},
+          "deck_extraction": {"type": "expression", "value": "\"extract-deck\".answer"},
+          "market_summary": {"type": "expression", "value": "\"size-market\".answer"},
+          "competitors_summary": {"type": "expression", "value": "\"map-competitors\".answer"},
+          "team_summary": {"type": "expression", "value": "\"research-team\".answer"}
+        }
+      }
+    },
+    {
+      "id": "score-deal",
+      "type": "FUNCTION",
+      "label": "Compute Thesis Score",
+      "config": {
+        "function_name": "compute_thesis_score",
+        "input_mapping": {
+          "deal_id": {"type": "expression", "value": "intake.deal_id"}
+        }
+      }
+    },
+    {
+      "id": "end",
+      "type": "END"
+    }
+  ],
+  "edges": [
+    {"id": "e0", "source": "intake", "target": "convert-deck"},
+    {"id": "e1", "source": "convert-deck", "target": "extract-deck"},
+    {"id": "e2", "source": "extract-deck", "target": "research-team"},
+    {"id": "e3", "source": "research-team", "target": "size-market"},
+    {"id": "e4", "source": "size-market", "target": "map-competitors"},
+    {"id": "e5", "source": "map-competitors", "target": "synthesise-brief"},
+    {"id": "e6", "source": "synthesise-brief", "target": "score-deal"},
+    {"id": "e7", "source": "score-deal", "target": "end"}
+  ]
+}

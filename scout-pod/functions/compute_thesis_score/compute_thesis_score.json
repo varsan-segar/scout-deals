@@ -1,0 +1,13 @@
+{
+  "name": "compute_thesis_score",
+  "description": "Computes a 0-10 thesis match score given extracted company data and investor thesis config. Pure deterministic scoring, no LLM.",
+  "type": "API",
+  "code": {"$file": "code.py"},
+  "permissions": {
+    "grants": [
+      {"resource_type": "datastore_table", "resource_name": "deals", "permission_ids": ["datastore.table.read", "datastore.record.read", "datastore.record.write"]},
+      {"resource_type": "datastore_table", "resource_name": "briefs", "permission_ids": ["datastore.table.read", "datastore.record.read", "datastore.record.write"]},
+      {"resource_type": "datastore_table", "resource_name": "thesis_config", "permission_ids": ["datastore.table.read", "datastore.record.read"]}
+    ]
+  }
+}

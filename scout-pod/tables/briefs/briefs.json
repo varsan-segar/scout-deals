@@ -1,0 +1,18 @@
+{
+  "name": "briefs",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "columns": [
+    { "name": "deal_id", "type": "TEXT", "required": true },
+    { "name": "thesis_breakdown_json", "type": "TEXT" },
+    { "name": "snapshot_json", "type": "TEXT" },
+    { "name": "founders_json", "type": "TEXT" },
+    { "name": "market_json", "type": "TEXT" },
+    { "name": "competitors_json", "type": "TEXT" },
+    { "name": "traction_json", "type": "TEXT" },
+    { "name": "risk_flags_json", "type": "TEXT" },
+    { "name": "sources_json", "type": "TEXT" },
+    { "name": "total_sources", "type": "INTEGER" }
+  ],
+  "config": {}
+}

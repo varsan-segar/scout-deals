@@ -1,0 +1,11 @@
+{
+  "name": "brief-synthesiser",
+  "description": "Synthesises all research into a final deal brief, computes thesis match score, and generates risk flags.",
+  "instruction": {"$file": "instruction.md"},
+  "toolsets": ["POD"],
+  "permissions": {
+    "grants": [
+      {"resource_type": "datastore_table", "resource_name": "briefs", "permission_ids": ["datastore.table.read", "datastore.record.read", "datastore.record.write"]}
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "notes",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "columns": [
+    { "name": "deal_id", "type": "TEXT", "required": true },
+    { "name": "content", "type": "TEXT", "required": true },
+    { "name": "author_name", "type": "TEXT" },
+    { "name": "author_email", "type": "TEXT" }
+  ],
+  "config": {}
+}

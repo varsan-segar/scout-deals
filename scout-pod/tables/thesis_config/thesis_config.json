@@ -1,0 +1,14 @@
+{
+  "name": "thesis_config",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "columns": [
+    { "name": "preferred_stages", "type": "TEXT" },
+    { "name": "preferred_sectors", "type": "TEXT" },
+    { "name": "founder_prefs", "type": "TEXT" },
+    { "name": "geography_focus", "type": "TEXT" },
+    { "name": "pre_revenue_ok", "type": "BOOLEAN", "default": true },
+    { "name": "anti_thesis", "type": "TEXT" }
+  ],
+  "config": {}
+}

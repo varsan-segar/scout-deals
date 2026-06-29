@@ -1,0 +1,14 @@
+{
+  "name": "fetch_outlook_message",
+  "description": "Fetches an email and its attachment from Outlook using the webhook message ID.",
+  "is_active": true,
+  "type": "API",
+  "code": {"$file": "code.py"},
+  "permissions": {
+    "grants": [
+      {"resource_type": "connector", "resource_name": "outlook", "permission_ids": ["connector.use"]},
+      {"resource_type": "folder", "resource_name": "/decks", "permission_ids": ["folder.read", "folder.write", "folder.delete"]},
+      {"resource_type": "datastore_table", "resource_name": "deals", "permission_ids": ["datastore.table.read", "datastore.record.write"]}
+    ]
+  }
+}

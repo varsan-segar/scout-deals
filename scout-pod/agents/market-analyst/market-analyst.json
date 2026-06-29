@@ -1,0 +1,6 @@
+{
+  "name": "market-analyst",
+  "description": "Researches market size (TAM/SAM/SOM). Returns a plain-text summary.",
+  "instruction": {"$file": "instruction.md"},
+  "toolsets": ["WEB_SEARCH"]
+}

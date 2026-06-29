@@ -1,0 +1,6 @@
+{
+  "name": "competitive-mapper",
+  "description": "Researches competitors for a startup. Returns a plain-text summary.",
+  "instruction": {"$file": "instruction.md"},
+  "toolsets": ["WEB_SEARCH"]
+}

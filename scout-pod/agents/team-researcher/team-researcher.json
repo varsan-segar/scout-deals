@@ -1,0 +1,6 @@
+{
+  "name": "team-researcher",
+  "description": "Researches startup founding teams using web search. Returns a plain-text summary.",
+  "instruction": {"$file": "instruction.md"},
+  "toolsets": ["WEB_SEARCH"]
+}

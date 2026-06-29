@@ -1,0 +1,24 @@
+{
+  "name": "email-extractor",
+  "description": "Extracts structured company information from pitch emails and attached decks.",
+  "instruction": {"$file": "instruction.md"},
+  "toolsets": ["POD"],
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "company_name": { "type": "string" },
+      "website_url": { "type": "string", "nullable": true },
+      "amount_raised": { "type": "string", "nullable": true },
+      "existing_investors": { "type": "string", "nullable": true },
+      "year_founded": { "type": "integer", "nullable": true },
+      "revenue_model": { "type": "string", "nullable": true },
+      "email_body": { "type": "string" }
+    },
+    "required": ["company_name", "email_body"]
+  },
+  "permissions": {
+    "grants": [
+      {"resource_type": "folder", "resource_name": "/decks", "permission_ids": ["folder.read"]}
+    ]
+  }
+}

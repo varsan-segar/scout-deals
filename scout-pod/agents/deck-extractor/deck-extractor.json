@@ -1,0 +1,12 @@
+{
+  "name": "deck-extractor",
+  "description": "Extracts structured company information from a pitch deck PDF uploaded to Lemma Files.",
+  "instruction": {"$file": "instruction.md"},
+  "toolsets": ["POD"],
+  "permissions": {
+    "grants": [
+      {"resource_type": "datastore_table", "resource_name": "briefs", "permission_ids": ["datastore.table.read", "datastore.record.read", "datastore.record.write"]},
+      {"resource_type": "folder", "resource_name": "/decks", "permission_ids": ["folder.read"]}
+    ]
+  }
+}

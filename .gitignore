@@ -1,0 +1,41 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Node / TypeScript
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Lemma local/runtime state and generated exports
+.lemma/
+lemma-runtime/
+*.lemma-package
+
+# Development tooling (IDE agent skills)
+.agents/
+
+# Deployable bundle snapshots
+bundles/
+
+# Generated test PDFs
+*.pdf
+
+# Editor and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+

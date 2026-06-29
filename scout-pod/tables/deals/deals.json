@@ -1,0 +1,22 @@
+{
+  "name": "deals",
+  "primary_key_column": "id",
+  "enable_rls": false,
+  "columns": [
+    { "name": "company_name", "type": "TEXT", "required": true },
+    { "name": "website_url", "type": "TEXT" },
+    { "name": "sector", "type": "ENUM", "options": ["FinTech", "HealthTech", "EdTech", "SaaS B2B", "Consumer", "D2C", "PropTech", "DeepTech", "Other"] },
+    { "name": "pipeline_stage", "type": "ENUM", "required": true, "default": "Screening", "options": ["Screening", "Interested", "Meeting", "Term Sheet", "Passed"] },
+    { "name": "status", "type": "ENUM", "required": true, "default": "Pending", "options": ["Pending", "Analyzing", "Ready", "Error", "Cancelled"] },
+    { "name": "thesis_match_score", "type": "FLOAT" },
+    { "name": "deck_file_path", "type": "FILE_PATH", "max_length": 500 },
+    { "name": "quick_note", "type": "TEXT" },
+    { "name": "amount_raised", "type": "TEXT" },
+    { "name": "existing_investors", "type": "TEXT" },
+    { "name": "year_founded", "type": "INTEGER" },
+    { "name": "revenue_model", "type": "TEXT" },
+    { "name": "email_body", "type": "TEXT" },
+    { "name": "workflow_run_id", "type": "TEXT" }
+  ],
+  "config": {}
+}
