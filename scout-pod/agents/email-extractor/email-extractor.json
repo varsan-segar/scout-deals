@@ -1,8 +1,8 @@
 {
   "name": "email-extractor",
-  "description": "Extracts structured company information from pitch emails and attached decks.",
+  "description": "Extracts structured company information from pitch emails.",
   "instruction": {"$file": "instruction.md"},
-  "toolsets": ["POD"],
+  "toolsets": [],
   "output_schema": {
     "type": "object",
     "properties": {
@@ -17,8 +17,6 @@
     "required": ["company_name", "email_body"]
   },
   "permissions": {
-    "grants": [
-      {"resource_type": "folder", "resource_name": "/decks", "permission_ids": ["folder.read"]}
-    ]
+    "grants": []
   }
 }
