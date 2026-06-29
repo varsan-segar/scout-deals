@@ -109,7 +109,7 @@ export function ThesisPage() {
     setEditing(false)
   }
 
-  const updateField = (field: string, value: string) => {
+  const updateField = (field: string, value: string | boolean) => {
     setLocalConfig({ ...localConfig, [field]: value })
   }
 
@@ -447,7 +447,7 @@ export function ThesisPage() {
                 <Checkbox
                   id="pre_revenue_ok"
                   checked={localConfig.pre_revenue_ok}
-                  onCheckedChange={checked => updateField('pre_revenue_ok', checked.toString())}
+                  onCheckedChange={checked => updateField('pre_revenue_ok', !!checked)}
                 />
                 <Label htmlFor="pre_revenue_ok" className="cursor-pointer">
                   We invest in pre-revenue companies
