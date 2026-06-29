@@ -89,7 +89,11 @@ export function NewDeal() {
           setSubmitStatus('Processing document...')
           // Poll until the file is ready or errors out
           let isReady = false
+          const pollTimeout = Date.now() + 60000
           while (!isReady) {
+            if (Date.now() > pollTimeout) {
+              throw new Error("File processing timed out after 60 seconds")
+            }
             const uploadedFile = await lemmaClient.files.get(deckPath)
             if (uploadedFile.status === 'COMPLETED' || uploadedFile.status === 'ERROR') {
               isReady = true
@@ -111,13 +115,9 @@ export function NewDeal() {
         quick_note: quickNote || undefined,
         amount_raised: amountRaised || undefined,
         existing_investors: existingInvestors || undefined,
-        year_founded: yearFounded ? parseInt(yearFounded, 10) : undefined,
+        year_founded: yearFounded ? (() => { const y = parseInt(yearFounded, 10); return isNaN(y) ? undefined : y })() : undefined,
         revenue_model: revenueModel || undefined,
       })
-
-      if (quickNote) {
-        // Assume notes table exists or handle later
-      }
 
       let workflowRunId: string | null = null
       if (startAnalysis && deal) {

@@ -106,7 +106,7 @@ def compute_thesis_score(ctx: FunctionContext, data: ThesisScoreInput) -> Thesis
             if not founders:
                 founder_score = 0.0
             else:
-                strong_keywords = ["ex-google", "ex-meta", "ex-apple", "ex-amazon", "ex-netflix", "stanford", "mit", "harvard", "serial", "repeat founder", "y combinator", "yc", "openai", "deepmind", "anthropic"]
+                strong_keywords = ["ex-google", "ex-meta", "ex-apple", "ex-amazon", "ex-netflix", "stanford", "mit", "harvard", "serial", "repeat founder", "y combinator", "yc", "openai", "deepmind", "anthropic", "iit", "iim", "bits", "isb", "ex-flipkart", "ex-oyo", "ex-zomato", "ex-phonepe", "ex-payu", "ex-razorpay"]
                 for f in founders:
                     bg = (f.get("background_summary", "") + " " + " ".join(f.get("previous_companies", [])) + " " + f.get("education", "")).lower()
                     if any(kw in bg for kw in strong_keywords):

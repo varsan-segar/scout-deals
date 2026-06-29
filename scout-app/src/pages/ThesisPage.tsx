@@ -80,7 +80,7 @@ export function ThesisPage() {
       anti_thesis: stringifyArray(parseTextArray(localConfig.anti_thesis)),
     }
     if (config?.id) {
-      await updateConfig(config.id, toSave)
+      await updateConfig(toSave, { recordId: config.id })
     } else {
       await createConfig(toSave)
     }

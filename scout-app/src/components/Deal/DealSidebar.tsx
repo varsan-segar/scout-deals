@@ -92,10 +92,10 @@ export function DealSidebar({ dealId, deal: propDeal }: { dealId: string, deal?:
               <span className="font-medium truncate max-w-[120px]" title={deal.revenue_model}>{deal.revenue_model}</span>
             </div>
           )}
-          {deal.website && (
+          {deal.website_url && (
             <div className="flex justify-between items-center text-sm">
               <span className="text-muted-foreground">Website</span>
-              <a href={deal.website} target="_blank" rel="noreferrer" className="text-primary flex items-center gap-1 hover:underline">
+              <a href={deal.website_url} target="_blank" rel="noreferrer" className="text-primary flex items-center gap-1 hover:underline">
                 Visit <ExternalLink size={12} />
               </a>
             </div>

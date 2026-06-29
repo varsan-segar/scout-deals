@@ -7,7 +7,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLe
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../components/ui/table'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
-import { Loader2, ArrowRight } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 export function Dashboard() {
@@ -85,7 +85,7 @@ export function Dashboard() {
 
   // Recent Deals (top 5 by created_at or updated_at)
   const recentDeals = [...dealsList]
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .sort((a, b) => (b.created_at ? new Date(b.created_at).getTime() : 0) - (a.created_at ? new Date(a.created_at).getTime() : 0))
     .slice(0, 5)
 
   return (
