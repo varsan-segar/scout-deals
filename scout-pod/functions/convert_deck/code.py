@@ -1,6 +1,7 @@
 #input_type_name: ConvertDeckInput
 #output_type_name: ConvertDeckResult
 #function_name: convert_deck
+#python_packages: python-pptx, fpdf2
 
 from pydantic import BaseModel
 from lemma_sdk import FunctionContext, Pod
@@ -44,13 +45,14 @@ def convert_deck(ctx: FunctionContext, data: ConvertDeckInput) -> ConvertDeckRes
         pdf.set_auto_page_break(auto=True, margin=15)
         pdf.set_font("Arial", size=12)
         
-        for idx, slide in enumerate(prs.slides):
-            if idx > 0:
-                pdf.add_page()
+        for slide in prs.slides:
+            pdf.add_page()
             for shape in slide.shapes:
-                if hasattr(shape, "text"):
-                    text = shape.text
-                    pdf.multi_cell(0, 10, txt=text)
+                if hasattr(shape, "text") and shape.text.strip():
+                    try:
+                        pdf.multi_cell(0, 10, txt=shape.text)
+                    except Exception:
+                        pass
             
         pdf.output(local_pdf)
         
