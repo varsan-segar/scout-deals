@@ -69,6 +69,8 @@ export function DealPage() {
 
   const handleRetry = async () => {
     if (!dealId) return
+    setTerminalStatus(null)
+    setRetryingRunId(null)
     if (!d?.deck_file_path) {
       alert("Cannot run analysis without a pitch deck. Please upload one first.")
       return
