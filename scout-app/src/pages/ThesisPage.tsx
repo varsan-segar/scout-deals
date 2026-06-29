@@ -15,6 +15,16 @@ const SECTOR_OPTIONS = ["FinTech", "HealthTech", "EdTech", "SaaS B2B", "Consumer
 const STAGE_OPTIONS = ["Pre-Seed", "Seed", "Series-A", "Series-B-Plus", "Growth", "Late Stage", "Undisclosed"]
 const GEOGRAPHY_OPTIONS = ["India", "US", "UK", "UAE", "SE Asia", "Europe", "Middle East", "Africa", "Latin America", "APAC"]
 
+const unwrapText = (val: unknown): string => {
+  if (!val) return ''
+  if (typeof val !== 'string') return String(val)
+  try {
+    const p = JSON.parse(val)
+    if (Array.isArray(p)) return p.filter(Boolean).join(', ')
+  } catch {}
+  return val
+}
+
 export function ThesisPage() {
   const { records: configList, isLoading, error: configError } = useRecords({
     client: lemmaClient,
@@ -82,7 +92,7 @@ export function ThesisPage() {
   const handleSave = async () => {
     const toSave = {
       ...localConfig,
-      core_thesis: stringifyArray(parseTextArray(localConfig.core_thesis)),
+      core_thesis: (localConfig.core_thesis || '').trim(),
       preferred_stages: stringifyArray(parseTextArray(localConfig.preferred_stages)),
       preferred_sectors: stringifyArray(parseTextArray(localConfig.preferred_sectors)),
       founder_prefs: stringifyArray(parseTextArray(localConfig.founder_prefs)),
@@ -159,13 +169,13 @@ export function ThesisPage() {
           <CardContent>
             {editing ? (
               <Textarea 
-                value={localConfig.core_thesis || ''}
+                value={unwrapText(localConfig.core_thesis)}
                 onChange={e => updateField('core_thesis', e.target.value)}
                 placeholder="We invest in companies that..."
                 className="min-h-[120px]"
               />
             ) : (
-              <p className="text-sm leading-relaxed">{displayConfig?.core_thesis ? parseTextArray(displayConfig.core_thesis).join(', ') : 'Not configured.'}</p>
+              <p className="text-sm leading-relaxed">{unwrapText(displayConfig?.core_thesis) || 'Not configured.'}</p>
             )}
           </CardContent>
         </Card>
