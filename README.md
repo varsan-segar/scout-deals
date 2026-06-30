@@ -2,6 +2,8 @@
 
 AI-powered investment deal screening platform for VC and angel investors. Automates company briefs, thesis matching, and pipeline tracking.
 
+> **New to Scout?** Open the in-app [Guide](scout-app/src/pages/DocsPage.tsx) at `/docs` for a walkthrough of all features, or visit the [GitHub repo](https://github.com/varsan-segar/scout-deals).
+
 ## Architecture
 
 Two components:
@@ -88,7 +90,7 @@ lemma apps deploy scout-app --source-dir . --yes
 scout-app/               React frontend
   src/
     components/          UI components (Deal, Board, Shell)
-    pages/               Route pages (Dashboard, BoardPage, DealPage, etc.)
+    pages/               Route pages (Dashboard, BoardPage, DealPage, DocsPage, etc.)
     lib/                 Utilities
     styles/              Global CSS
 scout-pod/               Lemma pod backend

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { List, Settings, Plus, Boxes, BarChart3, Columns3, ChevronLeft, ChevronRight } from 'lucide-react'
+import { List, Settings, Plus, Boxes, BarChart3, Columns3, ChevronLeft, ChevronRight, BookOpen } from 'lucide-react'
 import { Button } from '../ui/button'
 import { ThemeToggle } from '../ThemeToggle'
 
@@ -85,6 +85,17 @@ export function Sidebar() {
           }`}
         >
           <Settings size={18} className="shrink-0" /> {!isCollapsed && "Thesis Config"}
+        </Link>
+        <Link 
+          to="/docs" 
+          title={isCollapsed ? "Guide" : undefined}
+          className={`flex items-center gap-3 py-2 rounded-md text-sm font-medium transition-colors ${
+            isCollapsed ? 'justify-center px-0' : 'px-3'
+          } ${
+            isActive('/docs') ? 'bg-secondary text-primary' : 'text-muted-foreground hover:bg-secondary/50 hover:text-primary'
+          }`}
+        >
+          <BookOpen size={18} className="shrink-0" /> {!isCollapsed && "Guide"}
         </Link>
       </div>
 
