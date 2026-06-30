@@ -66,7 +66,7 @@ def normalize_geography(val):
 
 
 def safe_json_loads(val, default):
-    """Try json.loads, fall back to replacing single-quoted keys/values, then try extracting from first { to last }."""
+    """Try json.loads, fall back to single-quote fix, then try extracting from first { to last } or [ to ]."""
     if not val:
         return default
     for attempt in [
@@ -74,6 +74,8 @@ def safe_json_loads(val, default):
         lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v)),
         lambda v: json.loads(v[v.index("{"):v.rindex("}")+1]) if "{" in v and "}" in v else None,
         lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v[v.index("{"):v.rindex("}")+1])) if "{" in v and "}" in v else None,
+        lambda v: json.loads(v[v.index("["):v.rindex("]")+1]) if "[" in v and "]" in v else None,
+        lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v[v.index("["):v.rindex("]")+1])) if "[" in v and "]" in v else None,
     ]:
         try:
             result = attempt(val)

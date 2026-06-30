@@ -91,10 +91,17 @@ export function parseJSON<T>(value: unknown, fallback: T): T {
       return JSON.parse(value) as T
     } catch {
       try {
-        const first = value.indexOf('{')
-        const last = value.lastIndexOf('}')
-        if (first !== -1 && last > first) {
-          return JSON.parse(value.slice(first, last + 1)) as T
+        const firstBrace = value.indexOf('{')
+        const lastBrace = value.lastIndexOf('}')
+        if (firstBrace !== -1 && lastBrace > firstBrace) {
+          return JSON.parse(value.slice(firstBrace, lastBrace + 1)) as T
+        }
+      } catch {}
+      try {
+        const firstBracket = value.indexOf('[')
+        const lastBracket = value.lastIndexOf(']')
+        if (firstBracket !== -1 && lastBracket > firstBracket) {
+          return JSON.parse(value.slice(firstBracket, lastBracket + 1)) as T
         }
       } catch {}
       return fallback

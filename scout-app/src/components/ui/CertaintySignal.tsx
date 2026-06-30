@@ -28,7 +28,9 @@ export function CertaintySignal({ level, source }: CertaintySignalProps) {
       ))}
       <span style={{ color: c.color }}>{c.label}</span>
       {source && (
-        <a href={source} target="_blank" rel="noopener noreferrer" className="certainty-source">↗</a>
+        source.startsWith('http://') || source.startsWith('https://')
+          ? <a href={source} target="_blank" rel="noopener noreferrer" className="certainty-source">↗</a>
+          : <span className="certainty-source" title={source}>↗</span>
       )}
     </span>
   )
