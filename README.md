@@ -7,22 +7,26 @@ AI-powered investment deal screening platform for VC and angel investors. Automa
 Two components:
 
 - **`scout-app/`** — React + Vite + TypeScript frontend. Kanban board, deal detail views, dashboard, thesis config. Uses the Lemma SDK for auth and real-time data.
-- **`scout-pod/`** — Lemma pod backend. 6 agents, 4 functions, 4 tables, 2 workflows that orchestrate the deal research pipeline.
+- **`scout-pod/`** — Lemma pod backend. 9 agents, 5 functions, 4 tables, 2 workflows that orchestrate the deal research pipeline.
 
 ### Pipeline
 
 ```
-Deal created → deck-extractor → team-researcher → brief-synthesiser → score
-                                market-analyst ↗
-                                competitive-mapper ↗
+intake → convert-deck → deck-extractor ─→ team-researcher → team-synthesiser
+                                        ─→ market-analyst → market-synthesiser
+                                        ─→ competitive-mapper → competitor-synthesiser
+                                                               → brief-synthesiser → score-deal
 ```
 
-1. **deck-extractor** — Extracts structured data from uploaded pitch decks
-2. **team-researcher** — Researches founding team backgrounds
-3. **market-analyst** — Analyzes TAM/SAM/SOM, growth rate, drivers
-4. **competitive-mapper** — Maps competitive landscape
-5. **brief-synthesiser** — Synthesizes all research into a final brief with risk flags
-6. **compute_thesis_score** — Deterministic 0-10 thesis match score
+1. **deck-extractor** — Extracts structured data from uploaded pitch decks; creates initial briefs record
+2. **team-researcher** — Researches founding team backgrounds via web search
+3. **team-synthesiser** — Synthesizes team research into structured founders_json
+4. **market-analyst** — Analyzes TAM/SAM/SOM, growth rate, drivers
+5. **market-synthesiser** — Synthesizes market research into structured market_json
+6. **competitive-mapper** — Maps competitive landscape
+7. **competitor-synthesiser** — Synthesizes competitor research into structured competitors_json
+8. **brief-synthesiser** — Generates risk flags and aggregates sources
+9. **compute_thesis_score** — Deterministic 0-10 thesis match score
 
 ### Resources
 
