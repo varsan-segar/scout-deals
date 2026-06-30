@@ -66,23 +66,26 @@ def normalize_geography(val):
 
 
 def safe_json_loads(val, default):
-    """Try json.loads, fall back to single-quote fix, then try extracting from first { to last } or [ to ]."""
+    """Try json.loads, fall back to single-quote fix, then progressively strip trailing } and ]."""
     if not val:
         return default
     for attempt in [
         lambda v: json.loads(v),
         lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v)),
-        lambda v: json.loads(v[v.index("{"):v.rindex("}")+1]) if "{" in v and "}" in v else None,
-        lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v[v.index("{"):v.rindex("}")+1])) if "{" in v and "}" in v else None,
-        lambda v: json.loads(v[v.index("["):v.rindex("]")+1]) if "[" in v and "]" in v else None,
-        lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v[v.index("["):v.rindex("]")+1])) if "[" in v and "]" in v else None,
     ]:
         try:
-            result = attempt(val)
-            if result is not None:
-                return result
-        except (json.JSONDecodeError, ValueError, re.error):
+            return attempt(val)
+        except (json.JSONDecodeError, re.error):
             continue
+    # Progressively strip trailing } and ] characters
+    trimmed = val.rstrip()
+    for _ in range(5):
+        if trimmed.endswith("}") or trimmed.endswith("]"):
+            trimmed = trimmed[:-1]
+            try:
+                return json.loads(trimmed)
+            except json.JSONDecodeError:
+                continue
     return default
 
 
