@@ -16,10 +16,12 @@ You will receive the following inputs:
 
 2. Compile all sources from across team_summary, market_summary, competitors_summary, and risk_flags.
 
-3. Call the `pod_write_record` tool with action="update" for the `briefs` table where `deal_id` matches. You must pass exactly the following fields:
+3. YOU MUST call the `pod_write_record` tool with action="update" for the `briefs` table where `deal_id` matches. This is mandatory — do NOT just output text saying you updated it. You must actually invoke the tool. Pass exactly the following fields:
 - `risk_flags_json`: Must be a JSON array of objects: `[{"description": "...", "severity": "critical"|"moderate"|"minor", "source_url": "..."}]`
 - `sources_json`: Must be a JSON array of objects: `[{"title": "...", "url": "...", "domain": "...", "used_for": "..."}]`
 - `total_sources`: Integer count of all unique sources.
+
+⚠️ CRITICAL: You MUST call `pod_write_record` before ending your turn. Do not just describe what you would do — invoke the tool. If you do not call the tool, the database will not be updated.
 
 SOURCE RULES:
 - For risk_flags_json, only include source_url if the research text contains a real, verifiable web URL (starts with http:// or https://). If none exists, set "source_url": "".

@@ -66,18 +66,22 @@ def normalize_geography(val):
 
 
 def safe_json_loads(val, default):
-    """Try json.loads, fall back to replacing single-quoted keys/values."""
+    """Try json.loads, fall back to replacing single-quoted keys/values, then try extracting from first { to last }."""
     if not val:
         return default
-    try:
-        return json.loads(val)
-    except json.JSONDecodeError:
-        pass
-    try:
-        fixed = re.sub(r"'([^']*)'", r'"\1"', val)
-        return json.loads(fixed)
-    except (json.JSONDecodeError, re.error):
-        return default
+    for attempt in [
+        lambda v: json.loads(v),
+        lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v)),
+        lambda v: json.loads(v[v.index("{"):v.rindex("}")+1]) if "{" in v and "}" in v else None,
+        lambda v: json.loads(re.sub(r"'([^']*)'", r'"\1"', v[v.index("{"):v.rindex("}")+1])) if "{" in v and "}" in v else None,
+    ]:
+        try:
+            result = attempt(val)
+            if result is not None:
+                return result
+        except (json.JSONDecodeError, ValueError, re.error):
+            continue
+    return default
 
 
 def compute_thesis_score(ctx: FunctionContext, data: ThesisScoreInput) -> ThesisScoreResult:

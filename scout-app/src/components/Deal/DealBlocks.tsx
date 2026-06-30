@@ -64,30 +64,30 @@ export function SnapshotBlock({ snapshot }: { snapshot: any }) {
     <div className="space-y-6 text-sm">
       <div>
         <h4 className="font-semibold text-muted-foreground uppercase tracking-wider text-xs mb-2">Description</h4>
-        <p className="leading-relaxed">{snapshot.description}</p>
+        <p className="leading-relaxed">{snapshot.description || '—'}</p>
       </div>
       <div className="grid grid-cols-2 gap-8">
         <div>
           <h4 className="font-semibold text-muted-foreground uppercase tracking-wider text-xs mb-2">Problem</h4>
-          <p className="leading-relaxed">{snapshot.problem}</p>
+          <p className="leading-relaxed">{snapshot.problem || '—'}</p>
         </div>
         <div>
           <h4 className="font-semibold text-muted-foreground uppercase tracking-wider text-xs mb-2">Solution</h4>
-          <p className="leading-relaxed">{snapshot.solution}</p>
+          <p className="leading-relaxed">{snapshot.solution || '—'}</p>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-6 pt-4 border-t border-border/50">
         <div>
           <span className="block text-xs text-muted-foreground mb-1">Target User</span>
-          <span className="font-medium">{snapshot.target_user}</span>
+          <span className="font-medium">{snapshot.target_user || '—'}</span>
         </div>
         <div>
           <span className="block text-xs text-muted-foreground mb-1">Revenue Model</span>
-          <span className="font-medium">{snapshot.revenue_model}</span>
+          <span className="font-medium">{snapshot.revenue_model || '—'}</span>
         </div>
         <div>
           <span className="block text-xs text-muted-foreground mb-1">Funding Ask</span>
-          <span className="font-medium">{snapshot.funding_ask}</span>
+          <span className="font-medium">{snapshot.funding_ask === 'null' ? '—' : snapshot.funding_ask || '—'}</span>
         </div>
       </div>
     </div>

@@ -90,6 +90,13 @@ export function parseJSON<T>(value: unknown, fallback: T): T {
     try {
       return JSON.parse(value) as T
     } catch {
+      try {
+        const first = value.indexOf('{')
+        const last = value.lastIndexOf('}')
+        if (first !== -1 && last > first) {
+          return JSON.parse(value.slice(first, last + 1)) as T
+        }
+      } catch {}
       return fallback
     }
   }
