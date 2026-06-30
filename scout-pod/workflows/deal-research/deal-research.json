@@ -58,6 +58,18 @@
       }
     },
     {
+      "id": "synthesise-team",
+      "type": "AGENT",
+      "label": "team-synthesiser",
+      "config": {
+        "agent_name": "team-synthesiser",
+        "input_mapping": {
+          "deal_id": {"type": "expression", "value": "intake.deal_id"},
+          "team_summary": {"type": "expression", "value": "\"research-team\".answer"}
+        }
+      }
+    },
+    {
       "id": "size-market",
       "type": "AGENT",
       "label": "market-analyst",
@@ -71,6 +83,18 @@
       }
     },
     {
+      "id": "synthesise-market",
+      "type": "AGENT",
+      "label": "market-synthesiser",
+      "config": {
+        "agent_name": "market-synthesiser",
+        "input_mapping": {
+          "deal_id": {"type": "expression", "value": "intake.deal_id"},
+          "market_summary": {"type": "expression", "value": "\"size-market\".answer"}
+        }
+      }
+    },
+    {
       "id": "map-competitors",
       "type": "AGENT",
       "label": "competitive-mapper",
@@ -79,6 +103,18 @@
         "input_mapping": {
           "company_name": {"type": "expression", "value": "intake.company_name"},
           "deck_extraction": {"type": "expression", "value": "\"extract-deck\".answer"}
+        }
+      }
+    },
+    {
+      "id": "synthesise-competitors",
+      "type": "AGENT",
+      "label": "competitor-synthesiser",
+      "config": {
+        "agent_name": "competitor-synthesiser",
+        "input_mapping": {
+          "deal_id": {"type": "expression", "value": "intake.deal_id"},
+          "competitors_summary": {"type": "expression", "value": "\"map-competitors\".answer"}
         }
       }
     },
@@ -117,10 +153,13 @@
     {"id": "e0", "source": "intake", "target": "convert-deck"},
     {"id": "e1", "source": "convert-deck", "target": "extract-deck"},
     {"id": "e2", "source": "extract-deck", "target": "research-team"},
-    {"id": "e3", "source": "research-team", "target": "size-market"},
-    {"id": "e4", "source": "size-market", "target": "map-competitors"},
-    {"id": "e5", "source": "map-competitors", "target": "synthesise-brief"},
-    {"id": "e6", "source": "synthesise-brief", "target": "score-deal"},
-    {"id": "e7", "source": "score-deal", "target": "end"}
+    {"id": "e3_5", "source": "research-team", "target": "synthesise-team"},
+    {"id": "e4", "source": "synthesise-team", "target": "size-market"},
+    {"id": "e5", "source": "size-market", "target": "synthesise-market"},
+    {"id": "e6", "source": "synthesise-market", "target": "map-competitors"},
+    {"id": "e7", "source": "map-competitors", "target": "synthesise-competitors"},
+    {"id": "e8", "source": "synthesise-competitors", "target": "synthesise-brief"},
+    {"id": "e9", "source": "synthesise-brief", "target": "score-deal"},
+    {"id": "e10", "source": "score-deal", "target": "end"}
   ]
 }

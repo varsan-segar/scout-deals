@@ -59,9 +59,10 @@ export function AnalysisStatus({ dealId, companyName, workflowRunId, onTerminal 
   useEffect(() => {
     if (run?.status === 'COMPLETED' && !hasMarkedComplete.current) {
       hasMarkedComplete.current = true
+      updateDeal({ status: 'Ready' }, { recordId: dealId })
       onTerminal?.('Ready')
     }
-  }, [run?.status, onTerminal])
+  }, [run?.status, dealId, updateDeal, onTerminal])
 
   const currentNodeId = run?.current_node_id ?? null
   const stepHistory = run?.step_history as any[] | undefined
@@ -135,8 +136,6 @@ export function AnalysisStatus({ dealId, companyName, workflowRunId, onTerminal 
           })}
         </div>
       )}
-
-
     </div>
   )
 }

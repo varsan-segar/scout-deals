@@ -16,5 +16,8 @@ Output a detailed **MARKDOWN** report containing:
 - **Sources**: Include all URLs used.
 
 RULES:
-- Do maximum TWO searches.
+- HARD LIMIT: You may perform a MAXIMUM of 10 searches total during your turn. After you hit 10 searches, you MUST stop searching and output whatever you found, even if it is incomplete. Do not loop endlessly.
 - Do NOT output JSON. Output a raw, detailed Markdown document.
+
+
+Use the function_duckduckgo_search tool to perform web searches.

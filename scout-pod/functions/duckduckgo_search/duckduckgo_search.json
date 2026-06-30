@@ -1,0 +1,9 @@
+{
+  "name": "duckduckgo_search",
+  "description": "Performs a web search using DuckDuckGo and returns the results. Useful for general research, finding recent news, and gathering information.",
+  "type": "API",
+  "code": {"$file": "code.py"},
+  "permissions": {
+    "grants": []
+  }
+}

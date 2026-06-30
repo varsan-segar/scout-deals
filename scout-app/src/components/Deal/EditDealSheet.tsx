@@ -7,9 +7,10 @@ import { Button } from '../ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Textarea } from '../ui/textarea'
 import { Loader2 } from 'lucide-react'
-import { useWorkflowStart, useUpdateRecord } from 'lemma-sdk/react'
+import { useUpdateRecord } from 'lemma-sdk/react'
 import { lemmaClient } from '../../lemma-client'
 import { SECTORS, PIPELINE_STAGES, formatStage } from '../../lib/utils'
+import { startDealResearch } from '../../lib/workflow'
 
 interface EditDealSheetProps {
   deal: any
@@ -52,12 +53,6 @@ export function EditDealSheet({ deal, open, onOpenChange, onSaveSuccess, showAna
     }
   }, [open, deal])
   
-  const { start: startWorkflow } = useWorkflowStart({ 
-    client: lemmaClient, 
-    podId: lemmaClient.podId,
-    workflowName: 'deal-research'
-  })
-
   const { update: updateDeal } = useUpdateRecord({
     client: lemmaClient,
     podId: lemmaClient.podId,
@@ -90,7 +85,7 @@ export function EditDealSheet({ deal, open, onOpenChange, onSaveSuccess, showAna
   const handleStartAnalysis = async () => {
     try {
       setIsStarting(true)
-      const run = await startWorkflow({ 
+      const run = await startDealResearch({ 
         deal_id: deal.id,
         file_path: deal.deck_file_path || '',
         company_name: deal.company_name || '',

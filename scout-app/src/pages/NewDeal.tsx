@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useCreateRecord, useUploadFile, useWorkflowStart, useUpdateRecord } from 'lemma-sdk/react'
+import { useCreateRecord, useUploadFile, useUpdateRecord } from 'lemma-sdk/react'
 import { lemmaClient } from '../lemma-client'
 import { slugify, generateId, SECTORS, PIPELINE_STAGES } from '../lib/utils'
+import { startDealResearch } from '../lib/workflow'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetFooter } from '../components/ui/sheet'
 import { Button } from '../components/ui/button'
 import { Input } from '../components/ui/input'
@@ -37,11 +38,6 @@ export function NewDeal() {
     client: lemmaClient,
     podId: lemmaClient.podId,
     tableName: 'deals',
-  })
-  const { start: startWorkflow } = useWorkflowStart({ 
-    client: lemmaClient, 
-    podId: lemmaClient.podId,
-    workflowName: 'deal-research'
   })
   const { update: updateDeal } = useUpdateRecord({
     client: lemmaClient,
@@ -122,8 +118,8 @@ export function NewDeal() {
       let workflowRunId: string | null = null
       if (startAnalysis && deal) {
         setSubmitStatus('Starting analysis...')
-        const run = await startWorkflow({ 
-          deal_id: deal.id, 
+        const run = await startDealResearch({ 
+          deal_id: deal.id as string, 
           file_path: deckPath || '', 
           company_name: companyName, 
           sector: sector 

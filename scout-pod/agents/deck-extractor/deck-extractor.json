@@ -1,6 +1,6 @@
 {
   "name": "deck-extractor",
-  "description": "Extracts structured company information from a pitch deck PDF uploaded to Lemma Files.",
+  "description": "Extracts structured company information from a pitch deck PDF and creates the initial briefs record.",
   "instruction": {"$file": "instruction.md"},
   "toolsets": ["POD"],
   "permissions": {

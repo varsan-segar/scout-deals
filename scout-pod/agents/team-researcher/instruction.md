@@ -19,4 +19,8 @@ Output a detailed **MARKDOWN** report containing the following for each founder:
 
 RULES:
 - Do exactly ONE search per founder. Do NOT repeat searches. One search per person, then done.
+- HARD LIMIT: You may perform a MAXIMUM of 10 searches total during your turn. After you hit 10 searches, you MUST stop searching and output whatever you found, even if it is incomplete. Do not loop endlessly.
 - Do NOT output JSON. Output a raw, detailed Markdown document containing your research notes.
+
+
+Use the function_duckduckgo_search tool to perform web searches.

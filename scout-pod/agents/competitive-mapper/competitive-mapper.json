@@ -1,6 +1,20 @@
 {
   "name": "competitive-mapper",
   "description": "Researches competitors for a startup. Returns a plain-text summary.",
-  "instruction": {"$file": "instruction.md"},
-  "toolsets": ["WEB_SEARCH"]
+  "instruction": {
+    "$file": "instruction.md"
+  },
+  "permissions": {
+    "grants": [
+      {
+        "resource_type": "function",
+        "resource_name": "duckduckgo_search",
+        "permission_ids": [
+          "function.read",
+          "function.execute"
+        ]
+      }
+    ]
+  },
+  "toolsets": []
 }

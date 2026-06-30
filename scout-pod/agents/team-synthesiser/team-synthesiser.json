@@ -1,6 +1,6 @@
 {
-  "name": "brief-synthesiser",
-  "description": "Synthesises all research into risk flags and aggregates sources.",
+  "name": "team-synthesiser",
+  "description": "Synthesises team research into the briefs table.",
   "instruction": {"$file": "instruction.md"},
   "toolsets": ["POD"],
   "permissions": {

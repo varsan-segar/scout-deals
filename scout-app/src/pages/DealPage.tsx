@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
-import { useLiveRecords, useUpdateRecord, useWorkflowStart } from 'lemma-sdk/react'
+import { useLiveRecords, useUpdateRecord } from 'lemma-sdk/react'
 import { lemmaClient } from '../lemma-client'
-import { ArrowLeft, AlertTriangle, RotateCcw, Info } from 'lucide-react'
+import { ArrowLeft, AlertTriangle, RotateCcw, Info, Loader2 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { AnalysisStatus } from '../components/Deal/AnalysisStatus'
 import { DealSidebar } from '../components/Deal/DealSidebar'
@@ -18,6 +18,7 @@ import {
   SourcesCollapsible
 } from '../components/Deal/DealBlocks'
 import { parseJSON } from '../lib/utils'
+import { startDealResearch } from '../lib/workflow'
 
 export function DealPage() {
   const { dealId } = useParams()
@@ -45,12 +46,6 @@ export function DealPage() {
     client: lemmaClient,
     podId: lemmaClient.podId,
     tableName: 'deals',
-  })
-
-  const { start: startWorkflow } = useWorkflowStart({ 
-    client: lemmaClient, 
-    podId: lemmaClient.podId,
-    workflowName: 'deal-research'
   })
 
   const deal = deals?.[0]
@@ -103,18 +98,29 @@ export function DealPage() {
       alert("Cannot run analysis without a pitch deck. Please upload one first.")
       return
     }
-    const run = await startWorkflow({ 
-      deal_id: dealId,
-      file_path: d?.deck_file_path || '',
-      company_name: d?.company_name || '',
-      sector: d?.sector || '',
-    })
-    await updateDeal({ status: 'Analyzing', workflow_run_id: run.id }, { recordId: dealId })
-    setRetryingRunId(run.id as string)
+    try {
+      const run = await startDealResearch({ 
+        deal_id: dealId,
+        file_path: d?.deck_file_path || '',
+        company_name: d?.company_name || '',
+        sector: d?.sector || '',
+      })
+      await updateDeal({ status: 'Analyzing', workflow_run_id: run.id }, { recordId: dealId })
+      setRetryingRunId(run.id as string)
+    } catch (err) {
+      console.error("Failed to start analysis:", err)
+      alert("Failed to start analysis. Please try again.")
+    }
   }
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div></div>
+  }
+  if (terminalStatus === 'Ready' && !brief) {
+    return <div className="flex justify-center items-center h-screen text-muted-foreground">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mr-3"></div>
+      Loading report...
+    </div>
   }
   if (error || !deal) {
     return <div className="p-12 text-destructive">Deal not found</div>
