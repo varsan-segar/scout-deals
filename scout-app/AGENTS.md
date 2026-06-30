@@ -5,7 +5,7 @@ This is a Lemma app app generated from the Vite template.
 ## Runtime
 
 - App name: `scout-app`
-- Pod id: `019f0896-0c61-729a-a5a7-6dd1d56e47f6`
+- Pod id: `<your-pod-id>`
 - API URL: `https://api.lemma.work`
 - Auth URL: `https://lemma.work/auth`
 - Served by host at the root of the app subdomain (base path `/`)

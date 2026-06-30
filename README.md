@@ -111,6 +111,7 @@ lemma skills install lemma-widget
 ## Runtime
 
 - App: `scout-app`
-- Pod: `019f0896-0c61-729a-a5a7-6dd1d56e47f6`
 - API: `https://api.lemma.work`
 - Auth: `https://lemma.work/auth`
+
+> Set your pod ID in `scout-app/.env.local` — see `.env.example`.
