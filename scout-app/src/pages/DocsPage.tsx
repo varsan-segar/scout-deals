@@ -229,12 +229,11 @@ export function DocsPage() {
           <CollapsibleContent className="text-sm text-muted-foreground space-y-3">
             <div className="grid gap-3 sm:grid-cols-3">
               {[
-                { stage: 'Sourcing', desc: 'Deal has been created. Initial screening not yet started.' },
                 { stage: 'Screening', desc: 'Analysis pipeline is running or brief is ready for review.' },
-                { stage: 'Evaluation', desc: 'Brief reviewed; deeper due diligence in progress.' },
-                { stage: 'IC Meeting', desc: 'Being presented to the investment committee.' },
-                { stage: 'Closed Won', desc: 'Investment approved and completed.' },
-                { stage: 'Closed Lost', desc: 'Passed on the deal.' },
+                { stage: 'Interested', desc: 'Brief reviewed; deeper due diligence in progress.' },
+                { stage: 'Meeting', desc: 'Meeting scheduled or in progress with the founding team.' },
+                { stage: 'Term Sheet', desc: 'Negotiating terms for investment.' },
+                { stage: 'Passed', desc: 'Decided not to proceed with the deal.' },
               ].map((s) => (
                 <Card key={s.stage} className="p-3">
                   <p className="font-medium text-sm">{s.stage}</p>
@@ -325,16 +324,6 @@ export function DocsPage() {
               </div>
             </Card>
           ))}
-          <Card className="flex items-center gap-4 p-4 border-primary/50 bg-primary/5">
-            <Badge className="h-8 w-8 rounded-full p-0 flex items-center justify-center shrink-0 font-mono">
-              9
-            </Badge>
-            <Target size={20} className="text-primary shrink-0" />
-            <div className="min-w-0">
-              <p className="font-medium text-sm">Score Deal</p>
-              <p className="text-xs text-muted-foreground">Computes deterministic 0-10 thesis match score based on your configured thesis</p>
-            </div>
-          </Card>
         </div>
       </section>
 
@@ -418,12 +407,12 @@ export function DocsPage() {
             </CardHeader>
             <CardContent>
               <a
-                href="https://opencode.ai"
+                href="https://lemma.work"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-sm text-primary hover:underline inline-flex items-center gap-1"
               >
-                opencode.ai <ExternalLink size={14} />
+                lemma.work <ExternalLink size={14} />
               </a>
             </CardContent>
           </Card>
