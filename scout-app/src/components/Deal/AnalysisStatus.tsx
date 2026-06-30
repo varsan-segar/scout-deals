@@ -4,14 +4,14 @@ import { lemmaClient } from '../../lemma-client'
 import { Check, Loader2, Circle, AlertTriangle, Info } from 'lucide-react'
 
 const STEPS = [
-  { id: 'intake', label: 'Intaking deal data' },
-  { id: 'convert-deck', label: 'Converting pitch deck' },
   { id: 'extract-deck', label: 'Extracting deck content' },
   { id: 'research-team', label: 'Researching founding team' },
+  { id: 'synthesise-team', label: 'Synthesising team data' },
   { id: 'size-market', label: 'Estimating market opportunity' },
+  { id: 'synthesise-market', label: 'Synthesising market data' },
   { id: 'map-competitors', label: 'Mapping competitive landscape' },
+  { id: 'synthesise-competitors', label: 'Synthesising competitor data' },
   { id: 'synthesise-brief', label: 'Synthesising deal brief' },
-  { id: 'score-deal', label: 'Computing thesis match score' },
 ]
 
 function getStepState(nodeId: string, currentNodeId: string | null | undefined, stepHistory: any[] | undefined): 'done' | 'running' | 'waiting' {
